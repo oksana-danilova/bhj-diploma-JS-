@@ -20,13 +20,20 @@ const createRequest = (options = {}) => {
 			for (let [key, value] of data) {
 				url = url + '?' + key + '=' + value;
 			}
-		}
-
-		if (method !== 'GET') {
+		} else {
 			for (let [key, value] of data) {
 				formData.append(key, value);
 			}
 		}
+		/* 
+		if (method === 'GET') {
+			url += '?' + [...data].map(([key, value]) => `${key}=${value}`).join('&');
+		} else {
+			for (let [key, value] of data) {
+				formData.append(key, value);
+			}
+		}
+		*/
 	}
 
 	xhr.addEventListener('load', () => {
