@@ -12,7 +12,11 @@ class UserWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor(element){
-
+    if (!element) {
+      throw new Error('Элемент не может быть не определен');
+    }
+    this.element = element;
+    this.userNameElement = this.element.querySelector('.user-name');
   }
 
   /**
@@ -23,6 +27,11 @@ class UserWidget {
    * авторизованного пользователя
    * */
   update(){
-
+    const currentUser = User.current();
+    if (currentUser) {
+      this.userNameElement.textContent = currentUser.name;
+    } else {
+      this.userNameElement.textContent = 'Гость';
+    }
   }
 }
