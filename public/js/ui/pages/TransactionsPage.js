@@ -23,7 +23,7 @@ class TransactionsPage {
    * Вызывает метод render для отрисовки страницы
    * */
   update() {
-    this.render();
+    this.render(this.lastOptions);
   }
 
   /**
@@ -33,17 +33,25 @@ class TransactionsPage {
    * TransactionsPage.removeAccount соответственно
    * */
   registerEvents() {
-    const removeTransactionsButtons = this.element.querySelectorAll('.transaction__remove');
-    removeTransactionsButtons.forEach(button => {
-      button.addEventListener('click', (event) => {
-        const transactionId = event.target.dataset.id;
-        this.removeTransaction(transactionId);
-      });
+    const removeAccountsButton = this.element.querySelector(".remove-account");
+    const contentSection = document.querySelector(".content");
+
+    removeAccountsButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.removeAccount();
     });
 
-    const removeAccountsButton = this.element.querySelector('.remove-account');
-    removeAccountsButton.addEventListener('click', () => {
-      this.removeAccount();
+    contentSection.addEventListener("click", (e) => {
+      e.preventDefault();
+      let target = e.target.closest("button");
+      if (!target) {
+        return;
+      }
+      if (!contentSection.contains(target)) {
+        return;
+      }
+      console.log(target.dataset.id);
+      this.removeTransaction(target.dataset.id);
     });
   }
 
@@ -57,12 +65,19 @@ class TransactionsPage {
    * для обновления приложения
    * */
   removeAccount() {
-    if (confirm("Вы уверены, что хотите удалить этот счёт?")) {
-      Account.remove();
-      this.clear();
+    if (!this.lastOptions) {
+      return;
+    }
 
-      App.updateWidgets();
-      App.updateForms();
+    const confirmation = confirm("Вы действительно хотите удалить счёт?");
+    if (confirmation) {
+      Account.remove((this.lastOptions.id), (response) => {
+          if (response && response.success) {
+            App.updateWidgets();
+            App.updateForms();
+          }
+        });
+      this.clear();
     }
   }
 
@@ -178,11 +193,10 @@ class TransactionsPage {
    * */
   renderTransactions(data){
     const contentTransactions = this.element.querySelector('.content');
-    if (contentTransactions) {
-      contentTransactions.innerHTML = '';
-      data.forEach(item => {
-        contentTransactions.innerHTML += this.getTransactionHTML(item);
-      });
-    }
+    contentTransactions.innerHTML = data.reduce(
+      (accumulator, currentElem) =>
+        accumulator + " " + this.getTransactionHTML(currentElem),
+      ""
+    );
   }
 }
