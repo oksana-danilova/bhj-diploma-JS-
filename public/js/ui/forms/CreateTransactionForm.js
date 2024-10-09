@@ -46,10 +46,9 @@ class CreateTransactionForm extends AsyncForm {
       if (response && response.success) {
         App.update();
         this.element.reset();
-        this.close();
-      } else {
-        console.error('Ошибка при создании транзакции:', response.error);
-      }
+        App.getModal("newExpense").close();
+        App.getModal("newIncome").close();
+      };
     });
   }
 }
