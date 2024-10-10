@@ -62,12 +62,12 @@ class AccountsWidget {
   update() {
     const currentUser = User.current();
     if (currentUser) {
-      Account.list(currentUser.id)
-        .then(accounts => {
+      Account.list(user.data, (response) => {
+        if (response && response.success === true) {
           this.clear();
-          accounts.forEach(account => this.renderItem(account));
-        })
-        .catch(error => console.error('Error fetching accounts:', error));
+          this.renderItem(response.data);
+        }
+      });
     }
   }
 
@@ -88,7 +88,7 @@ class AccountsWidget {
    * счёта класс .active.
    * Вызывает App.showPage( 'transactions', { account_id: id_счёта });
    * */
-  onSelectAccount( element ) {
+  onSelectAccount(element) {
     const activeAccount = this.element.querySelector('.account.active');
     if (activeAccount) {
       activeAccount.classList.remove('active');
@@ -103,7 +103,7 @@ class AccountsWidget {
    * отображения в боковой колонке.
    * item - объект с данными о счёте
    * */
-  getAccountHTML(item){
+  getAccountHTML(item) {
     return `
       <li class="account" data-id="${item.id}">
         <div class="account__info">
@@ -119,11 +119,9 @@ class AccountsWidget {
    * AccountsWidget.getAccountHTML HTML-код элемента
    * и добавляет его внутрь элемента виджета
    * */
-  renderItem(data){
-    const accountsPanel = document.querySelector(".accounts-panel");
-    data.forEach((elem) => {
-      let newCode = this.getAccountHTML(elem);
-      accountsPanel.insertAdjacentHTML("beforeend", newCode);
+  renderItem(data) {
+    data.forEach((item) => {
+      this.element.insertAdjacentHTML("beforeend", this.getAccountHTML(item));
     });
   }
 }
