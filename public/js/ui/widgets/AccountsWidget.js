@@ -13,7 +13,7 @@ class AccountsWidget {
    * Если переданный элемент не существует,
    * необходимо выкинуть ошибку.
    * */
-  constructor( element ) {
+  constructor(element) {
     if (!element) {
       throw new Error('Элемент не может быть не определен');
     }
@@ -62,13 +62,13 @@ class AccountsWidget {
   update() {
     const currentUser = User.current();
     if (currentUser) {
-      Account.list(user.data, (response) => {
-        if (response && response.success === true) {
+      Account.list(currentUser, (err, response) => {
+        if (response && response.success) {
           this.clear();
           this.renderItem(response.data);
         }
       });
-    }
+    } 
   }
 
   /**
@@ -77,7 +77,7 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-    const accountsList = this.element.querySelector('.accounts-list');
+    const accountsList = this.element.querySelector('.account');
     accountsList.innerHTML = '';
   }
 
@@ -106,10 +106,10 @@ class AccountsWidget {
   getAccountHTML(item) {
     return `
       <li class="account" data-id="${item.id}">
-        <div class="account__info">
-          <strong>${item.name}</strong>
-          <span>${item.balance}₽</span>
-        </div>
+        <a href="#">
+          <span>${item.name}</span> /
+          <span>${item.sum} ₽</span>
+        </a>
       </li>`;
   }
 
