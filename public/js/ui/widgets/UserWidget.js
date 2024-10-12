@@ -13,10 +13,9 @@ class UserWidget {
    * */
   constructor(element){
     if (!element) {
-      throw new Error('Элемент не может быть не определен');
+      throw new Error('Элемент не существует');
     }
     this.element = element;
-    this.userNameElement = this.element.querySelector('.user-name');
   }
 
   /**
