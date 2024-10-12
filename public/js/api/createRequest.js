@@ -6,14 +6,10 @@ const createRequest = (options = {}) => {
 	const xhr = new XMLHttpRequest();
 	xhr.responseType = 'json';
 
-	let {
-		url,
-		method,
-		data
-	} = options;
+	let {url, method, data, callback} = options;
 	let formData = new FormData();
 
-	if (options.data) {
+	if (data) {
 		data = Object.entries(options.data);
 
 		if (method === 'GET') {
@@ -37,13 +33,13 @@ const createRequest = (options = {}) => {
 	}
 
 	xhr.addEventListener('load', () => {
-		options.callback(null, xhr.response);
+		callback(null, data);
 	});
 
 	try {
 		xhr.open(method, url);
 		xhr.send(formData);
 	} catch (err) {
-		options.callback(err, xhr.response);
+		callback(err, data);
 	}
 }
