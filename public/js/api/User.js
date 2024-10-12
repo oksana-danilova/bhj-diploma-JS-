@@ -39,7 +39,7 @@ class User {
 			method: 'GET',
 			responseType: 'json',
 			callback: (err, response) => {
-				if (response && response.success === true) {
+				if (response && response.user) {
 					this.setCurrent(response.user);
 				} else {
 					this.unsetCurrent();
@@ -83,7 +83,7 @@ class User {
 			responseType: 'json',
 			data,
 			callback: (err, response) => {
-				if (response && response.success === true) {
+				if (response && response.user) {
 					this.setCurrent(response.user);
 				}
 				callback(err, response);
@@ -101,7 +101,7 @@ class User {
 			method: 'POST',
 			responseType: 'json',
 			callback: (err, response) => {
-				if (response && response.success === true) {
+				if (response && response.success) {
 					this.unsetCurrent();
 				}
 				callback(err, response);
