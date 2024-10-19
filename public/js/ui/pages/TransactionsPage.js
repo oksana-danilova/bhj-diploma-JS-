@@ -58,17 +58,16 @@ class TransactionsPage {
    * для обновления приложения
    * */
   removeAccount() {
-    if (!this.lastOptions) {
-      return;
-    }
-    if (confirm("Вы действительно хотите удалить счёт?")) {
-      Account.remove({id}, (err, response) => {
-          if (response && response.success) {
-            App.updateWidgets();
-            App.updateForms();
+    if ( this.lastOptions.account_id ) {
+      let confirmAccountRequest = confirm( 'Вы действительно хотите удалить этот счет?' );
+      if ( confirmAccountRequest ) {
+        Account.remove({id: this.lastOptions.account_id}, response => {
+          if ( response.success ) {
+            this.clear();
+            App.update();
           }
         });
-      this.clear();
+      }
     }
   }
 
@@ -80,7 +79,7 @@ class TransactionsPage {
    * */
   removeTransaction(id) {
     if (confirm("Вы уверены, что хотите удалить эту транзакцию?")) {
-      Transaction.remove({id}, (err, response) => {
+      Transaction.remove({id: id}, (err, response) => {
         if (response && response.success) {
           App.update();
         }
