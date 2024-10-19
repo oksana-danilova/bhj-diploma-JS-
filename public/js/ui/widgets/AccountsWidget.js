@@ -77,8 +77,10 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-    const accountsList = this.element.querySelector('.account');
-    accountsList.innerHTML = '';
+    const accountsList = this.element.querySelectorAll('.account');
+    accountsList.forEach(account => {
+      account.innerHTML = '';
+    })
   }
 
   /**
