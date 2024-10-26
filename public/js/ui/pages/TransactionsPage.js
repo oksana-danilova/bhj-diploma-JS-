@@ -36,10 +36,10 @@ class TransactionsPage {
       e.preventDefault();
 
       const removeAccountsButton = e.target.closest(".remove-account");
-      const transactionRemoveButton = e.target.closest(".tranaction__remove");
+      const transactionRemoveButton = e.target.closest(".transaction__remove");
 
       if (removeAccountsButton) {
-        return this.removeAccount;
+        return this.removeAccount();
       }
 
       if (transactionRemoveButton) {
@@ -58,16 +58,15 @@ class TransactionsPage {
    * для обновления приложения
    * */
   removeAccount() {
-    if ( this.lastOptions.account_id ) {
-      let confirmAccountRequest = confirm( 'Вы действительно хотите удалить этот счет?' );
-      if ( confirmAccountRequest ) {
-        Account.remove({id: this.lastOptions.account_id}, response => {
-          if ( response.success ) {
-            this.clear();
-            App.update();
-          }
-        });
-      }
+    if (!this.lastOptions) {
+      return;
+    }
+    if (confirm("Вы действительно хотите удалить счёт?") || (response && response.success)) {
+      Account.remove({id}, (err, response) => {
+            App.updateWidgets();
+            App.updateForms();
+			      this.clear();
+      })
     }
   }
 
@@ -78,11 +77,9 @@ class TransactionsPage {
    * либо обновляйте текущую страницу (метод update) и виджет со счетами
    * */
   removeTransaction(id) {
-    if (confirm("Вы уверены, что хотите удалить эту транзакцию?")) {
-      Transaction.remove({id: id}, (err, response) => {
-        if (response && response.success) {
+    if (confirm("Вы уверены, что хотите удалить эту транзакцию?") || (response && response.success)) {
+      Transaction.remove({id}, (err, response) => {
           App.update();
-        }
       });
     }
   }
