@@ -64,7 +64,7 @@ class TransactionsPage {
       Account.remove({id}, (err, response) => {
             App.updateWidgets();
             App.updateForms();
-			      this.clear();
+            this.clear();
       })
     }
   }
