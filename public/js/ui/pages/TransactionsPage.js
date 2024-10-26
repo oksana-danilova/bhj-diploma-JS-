@@ -41,7 +41,6 @@ class TransactionsPage {
       if (removeAccountsButton) {
         return this.removeAccount();
       }
-
       if (transactionRemoveButton) {
         this.removeTransaction(transactionRemoveButton.dataset.id);
       }
