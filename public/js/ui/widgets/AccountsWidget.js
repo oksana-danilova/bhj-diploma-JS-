@@ -42,7 +42,7 @@ class AccountsWidget {
       if (!target) {
         return;
       }
-      if (!accountsPanel.contains(target)) {
+      if (target.classList.contains("create-account")) {
         return;
       }
       this.onSelectAccount(target);
