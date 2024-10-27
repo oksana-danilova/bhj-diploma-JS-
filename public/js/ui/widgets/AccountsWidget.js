@@ -42,10 +42,9 @@ class AccountsWidget {
       if (!target) {
         return;
       }
-      if (target.classList.contains("create-account")) {
-        return;
+      if (target.classList.contains("account")) {
+        this.onSelectAccount(target);
       }
-      this.onSelectAccount(target);
     });
   }
 
