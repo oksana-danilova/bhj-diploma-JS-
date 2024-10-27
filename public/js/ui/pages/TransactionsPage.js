@@ -60,12 +60,14 @@ class TransactionsPage {
     if (!this.lastOptions) {
       return;
     }
-    if (confirm("Вы действительно хотите удалить счёт?") || (response && response.success)) {
-      Account.remove({id}, (err, response) => {
-            App.updateWidgets();
-            App.updateForms();
-            this.clear();
-      })
+    if (confirm("Вы действительно хотите удалить счёт?")) {
+      Account.remove({id: this.lastOptions.account_id}, (err, response) => {
+        if (response && response.success) {
+          App.updateWidgets();
+          App.updateForms();
+          this.clear();
+        }
+      });
     }
   }
 
@@ -76,9 +78,11 @@ class TransactionsPage {
    * либо обновляйте текущую страницу (метод update) и виджет со счетами
    * */
   removeTransaction(id) {
-    if (confirm("Вы уверены, что хотите удалить эту транзакцию?") || (response && response.success)) {
+    if (confirm("Вы уверены, что хотите удалить эту транзакцию?")) {
       Transaction.remove({id}, (err, response) => {
+        if (response && response.success) {
           App.update();
+        }
       });
     }
   }
